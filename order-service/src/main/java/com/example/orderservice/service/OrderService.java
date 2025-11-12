@@ -17,6 +17,10 @@ public class OrderService {
         this.restTemplate = restTemplate;
     }
 
+//    public OrderService() {
+//        this.restTemplate = RestTemplateLogger.getLoggingTemplate();
+//    }
+
     public Order placeOrder(Order order) {
         Boolean available = restTemplate.getForObject(
                 inventoryUrl + "/check?code=" + order.productCode() + "&qty=" + order.quantity(),
