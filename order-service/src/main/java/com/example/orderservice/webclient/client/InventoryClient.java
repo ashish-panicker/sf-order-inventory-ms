@@ -2,6 +2,7 @@ package com.example.orderservice.webclient.client;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Component
 public class InventoryClient {
@@ -23,5 +24,17 @@ public class InventoryClient {
                 .bodyToMono(Boolean.class)
                 .block(); // blocking only for demo purposes
         return result != null && result;
+    }
+
+    public Mono<Boolean> checkStockReactive(String code, int qty) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/api/inventory/check")
+                        .queryParam("code", code)
+                        .queryParam("qty", qty)
+                        .build())
+                .retrieve()
+                .bodyToMono(Boolean.class)
+                .onErrorReturn(false);
     }
 }
