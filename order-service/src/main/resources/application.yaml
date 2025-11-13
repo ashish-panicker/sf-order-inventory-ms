@@ -3,6 +3,23 @@ server:
 spring:
   application:
     name: order-service
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
 inventory:
   service:
     url: http://localhost:8082/api/inventory
+logging:
+  level:
+    com.example.orderservice.client.InventoryFeignClient: DEBUG
+    feign: TRACE
+resilience4j:
+  circuitbreaker:
+    instances:
+      inventoryCB:
+        registerHealthIndicator: true
+        sliding-window-size: 5
+        permitted-number-of-calls-in-half-open-state: 5
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 5
